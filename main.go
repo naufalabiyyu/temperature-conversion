@@ -2,114 +2,112 @@ package main
 
 import "fmt"
 
-type celcius struct {
-	suhu float64
+type celsius struct {
+	temperature float64
 }
 
 type fahrenheit struct {
-	suhu float64
+	temperature float64
 }
 
 type kelvin struct {
-	suhu float64
+	temperature float64
 }
 
-func (c celcius) toCelcius() float64 {
-	return c.suhu
+func (c celsius) toCelsius() float64 {
+	return c.temperature
 }
 
-func (c celcius) toFahrenheit() float64 {
-	return ((9.0 / 5.0) * c.suhu) + 32
+func (c celsius) toFahrenheit() float64 {
+	return ((9.0 / 5.0) * c.temperature) + 32
 }
 
-func (c celcius) toKelvin() float64 {
-	return c.suhu + 273.15
+func (c celsius) toKelvin() float64 {
+	return c.temperature + 273.15
 }
 
 func (f fahrenheit) toFahrenheit() float64 {
-	return f.suhu
+	return f.temperature
 }
 
-func (f fahrenheit) toCelcius() float64 {
-	return (f.suhu - 32) * (5.0 / 9.0)
+func (f fahrenheit) toCelsius() float64 {
+	return (f.temperature - 32) * (5.0 / 9.0)
 }
 
 func (f fahrenheit) toKelvin() float64 {
-	return (f.suhu + 459.67) * (5.0 / 9.0)
+	return (f.temperature + 459.67) * (5.0 / 9.0)
 }
 
 func (k kelvin) toKelvin() float64 {
-	return k.suhu
+	return k.temperature
 }
 
-func (k kelvin) toCelcius() float64 {
-	return k.suhu - 273.15
+func (k kelvin) toCelsius() float64 {
+	return k.temperature - 273.15
 }
 
 func (k kelvin) toFahrenheit() float64 {
-	return (k.suhu * (9.0 / 5.0)) - 459.67
+	return (k.temperature * (9.0 / 5.0)) - 459.67
 }
 
-type hitungSuhu interface {
-	toCelcius() float64
+type temperatureConverter interface {
+	toCelsius() float64
 	toFahrenheit() float64
 	toKelvin() float64
 }
 
 func main() {
-	fmt.Println("Pilih suhu awal : ")
-	fmt.Println("1. Celcius ")
+	fmt.Println("Choose initial temperature scale:")
+	fmt.Println("1. Celsius")
 	fmt.Println("2. Fahrenheit")
 	fmt.Println("3. Kelvin")
-	fmt.Print("Masukan pilihan suhu awal : ")
+	fmt.Print("Enter your choice for initial temperature scale: ")
 
-	var suhuAwal int
-	fmt.Scanf("%d", &suhuAwal)
+	var initialScale int
+	fmt.Scanf("%d", &initialScale)
 
-	for suhuAwal < 1 || suhuAwal > 3 {
-		fmt.Println("Suhu awal tidak tersedia, Pilihlah kembali suhu awal :")
-		fmt.Scanf("%d", &suhuAwal)
+	for initialScale < 1 || initialScale > 3 {
+		fmt.Print("Invalid choice. Please choose the initial temperature scale again: ")
+		fmt.Scanf("%d", &initialScale)
 	}
 
-	fmt.Println("Pilih suhu akhir : ")
-	fmt.Println("1. Celcius ")
+	fmt.Println("Choose target temperature scale:")
+	fmt.Println("1. Celsius")
 	fmt.Println("2. Fahrenheit")
 	fmt.Println("3. Kelvin")
-	fmt.Print("Masukan pilihan suhu akhir : ")
+	fmt.Print("Enter your choice for target temperature scale: ")
 
-	var suhuAkhir int
-	fmt.Scanf("%d", &suhuAkhir)
+	var targetScale int
+	fmt.Scanf("%d", &targetScale)
 
-	for suhuAkhir < 1 || suhuAkhir > 3 {
-		fmt.Println("Suhu akhir tidak tersedia, Pilihlah kembali suhu akhir :")
-		fmt.Scanf("%d", &suhuAkhir)
+	for targetScale < 1 || targetScale > 3 {
+		fmt.Print("Invalid choice. Please choose the target temperature scale again: ")
+		fmt.Scanf("%d", &targetScale)
 	}
 
-	var suhu float64
-	fmt.Print("Masukan suhu : ")
-	fmt.Scanf("%f", &suhu)
+	var temperature float64
+	fmt.Print("Enter temperature value: ")
+	fmt.Scanf("%f", &temperature)
 
-	var interfaceSuhu hitungSuhu
-	switch suhuAwal {
+	var converter temperatureConverter
+	switch initialScale {
 	case 1:
-		interfaceSuhu = celcius{suhu}
+		converter = celsius{temperature}
 	case 2:
-		interfaceSuhu = fahrenheit{suhu}
+		converter = fahrenheit{temperature}
 	case 3:
-		interfaceSuhu = kelvin{suhu}
+		converter = kelvin{temperature}
 	}
 
 	var result float64
-
-	switch suhuAkhir {
+	switch targetScale {
 	case 1:
-		result = interfaceSuhu.toCelcius()
+		result = converter.toCelsius()
 	case 2:
-		result = interfaceSuhu.toFahrenheit()
+		result = converter.toFahrenheit()
 	case 3:
-		result = interfaceSuhu.toKelvin()
+		result = converter.toKelvin()
 	}
 
-	fmt.Printf("Hasil konversi : %.2f\n", result)
-
+	fmt.Printf("Conversion result: %.2f\n", result)
 }
